@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'class_object.dart';
 import 'mixins/kontak.dart';
 import 'mixins/pengalaman.dart';
@@ -19,11 +20,42 @@ class Dosen extends Mahasiswa with Pengalaman, Sertifikasi, Kontak {
 
 void main() {
   Dosen dosen = Dosen();
-  dosen.nama = 'Dr. Budi Santoso';
-  dosen.nip = '123456789';
-  dosen.jurusan = 'Teknik Informatika';
-  dosen.setKontak('budi.santoso@university.edu', '081234567890');
-  dosen.tambahPengalaman(10);
-  dosen.tambahSertifikat('Sertifikasi Pengajaran');
+
+  stdout.write('Masukkan Nama Dosen: ');
+  dosen.nama = stdin.readLineSync();
+
+  stdout.write('Masukkan NIP: ');
+  dosen.nip = stdin.readLineSync();
+
+  stdout.write('Masukkan Jurusan: ');
+  dosen.jurusan = stdin.readLineSync();
+
+  stdout.write('Masukkan Nomor Telepon: ');
+  String? telepon = stdin.readLineSync();
+
+  stdout.write('Masukkan Email: ');
+  String? email = stdin.readLineSync();
+
+  dosen.setKontak(email ?? '', telepon ?? '');
+
+  stdout.write('Masukkan Tahun Mulai Kerja (YYYY): ');
+  String? tms = stdin.readLineSync();
+  if (tms != null && tms.isNotEmpty) {
+    int? tahunMulai = int.tryParse(tms);
+    if (tahunMulai != null) {
+      dosen.setTahunMulai(tahunMulai);
+    } else {
+      print('Input tahun tidak valid. Pengalaman diset 0.');
+    }
+  } else {
+    print('Tidak ada input tahun mulai. Pengalaman diset 0.');
+  }
+
+  stdout.write('Masukkan Sertifikasi (kosong jika tidak ada): ');
+  String? sertifikat = stdin.readLineSync();
+  if (sertifikat != null && sertifikat.isNotEmpty) {
+    dosen.tambahSertifikat(sertifikat);
+  }
+
   dosen.tampilkanInfoDosen();
 }
